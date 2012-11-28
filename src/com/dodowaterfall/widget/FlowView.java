@@ -55,7 +55,7 @@ public class FlowView extends ImageView implements View.OnClickListener,
 
 	}
 
-	@Override
+	
 	public boolean onLongClick(View v) {
 		Log.d("FlowView", "LongClick");
 		Toast.makeText(context, "长按：" + getId(),
@@ -63,7 +63,7 @@ public class FlowView extends ImageView implements View.OnClickListener,
 		return true;
 	}
 
-	@Override
+	
 	public void onClick(View v) {
 		Log.d("FlowView", "Click");
 		Toast.makeText(context, "单击：" + getId(),
@@ -91,6 +91,7 @@ public class FlowView extends ImageView implements View.OnClickListener,
 	 */
 	public void recycle() {
 		setImageBitmap(null);
+		Log.i("recycle image", "recycle image id:"+this.getId());
 		if ((this.bitmap == null) || (this.bitmap.isRecycled()))
 			return;
 		this.bitmap.recycle();

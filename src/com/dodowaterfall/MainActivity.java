@@ -24,6 +24,8 @@ public class MainActivity extends Activity {
 
 	private LazyScrollView waterfall_scroll;
 	private LinearLayout waterfall_container;
+	
+	//存放column_count个LinearLayout 每个LinearLayout表示一列
 	private ArrayList<LinearLayout> waterfall_items;
 	private Display display;
 	private AssetManager asset_manager;
@@ -38,19 +40,28 @@ public class MainActivity extends Activity {
 	private int current_page = 0;// 当前页数
 
 	private int[] topIndex;
-	private int[] bottomIndex;
-	private int[] lineIndex;
-	private int[] column_height;// 每列的高度
+	
+	//表示当前瀑布流最底部的三张图的索引 比如第一列有21张图 索引为20 第二列有19张 索引为18 第三列有22张 索引为21
+	private int[] bottomIndex; 
+	
+	//每列当前图片的索引,相当于临时变量 比如第一列的第9张图 lineIndex[0]=9;
+	private int[] lineIndex; 
+	
+	// 每列总共的高度 当前列加入10张图时,为10张图的总高度
+	private int[] column_height;
 
+	//存放所有图片的ID和文件名
 	private HashMap<Integer, String> pins;
 
 	private int loaded_count = 0;// 已加载数量
-
+	
+	//存column_count列数组 存放每列每张图的总高度 
+	//比如第一列第一张图高90  总高度为90、第一列第2张图高120 总高度为210... 
 	private HashMap<Integer, Integer>[] pin_mark = null;
 
 	private Context context;
 
-	private HashMap<Integer, FlowView> iviews;
+	private HashMap<Integer, FlowView> iviews;//存放所有图片对象,以ID为Key
 	int scroll_height;
 
 	@Override
@@ -88,26 +99,24 @@ public class MainActivity extends Activity {
 		waterfall_scroll.getView();
 		waterfall_scroll.setOnScrollListener(new OnScrollListener() {
 
-			@Override
+			
 			public void onTop() {
 				// 滚动到最顶端
 				Log.d("LazyScroll", "Scroll to top");
 			}
 
-			@Override
+			
 			public void onScroll() {
 
 			}
 
-			@Override
 			public void onBottom() {
 				// 滚动到最低端
 				AddItemToContainer(++current_page, page_count);
 			}
 
-			@Override
+		
 			public void onAutoScroll(int l, int t, int oldl, int oldt) {
-
 				// Log.d("MainActivity",
 				// String.format("%d  %d  %d  %d", l, t, oldl, oldt));
 
@@ -282,16 +291,12 @@ public class MainActivity extends Activity {
 	private void AddImage(String filename, int rowIndex, int id) {
 
 		FlowView item = new FlowView(context);
-		// item.setColumnIndex(columnIndex);
-
 		item.setRowIndex(rowIndex);
 		item.setId(id);
 		item.setViewHandler(handler);
 		item.setFileName(image_path + "/" + filename);
 		item.setItemWidth(item_width);
 		item.LoadImage();
-		// waterfall_items.get(columnIndex).addView(item);
-
 	}
 
 	private int GetMinValue(int[] array) {

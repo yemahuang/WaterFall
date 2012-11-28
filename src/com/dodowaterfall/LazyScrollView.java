@@ -46,6 +46,9 @@ public class LazyScrollView extends ScrollView {
 				super.handleMessage(msg);
 				switch (msg.what) {
 				case 1:
+					//view.getMeasuredHeight() 得到这个Scroll里View的总高度过
+					//getScrollY得到当前滑块位置和顶部的差值
+					//得到scroll在手机屏幕上的高度.最大为手机屏幕高度
 					if (view.getMeasuredHeight() - 20 <= getScrollY()
 							+ getHeight()) {
 						if (onScrollListener != null) {
@@ -58,7 +61,7 @@ public class LazyScrollView extends ScrollView {
 						}
 					} else {
 						if (onScrollListener != null) {
-							onScrollListener.onScroll();
+							onScrollListener.onScroll();//发现调用方没有实现
 						}
 					}
 					break;
@@ -72,13 +75,13 @@ public class LazyScrollView extends ScrollView {
 
 	OnTouchListener onTouchListener = new OnTouchListener() {
 
-		@Override
+		
 		public boolean onTouch(View v, MotionEvent event) {
 
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				break;
-			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_UP://用户弹出界面后，200毫秒通过调用层滑动发生改变
 				if (view != null && onScrollListener != null) {
 					handler.sendMessageDelayed(handler.obtainMessage(
 							Constants.HANDLER_WHAT), Constants.MESSAGE_DELAY);
